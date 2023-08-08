@@ -16,7 +16,9 @@ use App\Http\Controllers\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::fallback(function () {
+    return view('index');
+});
 Route::get('/', function(){
     return view('index');
 });
@@ -30,12 +32,12 @@ Route::controller(UserController::class)->group(function(){
 });
 
 Route::controller(BookController::class)->group(function(){
-    Route::get('/add' , 'showAdd')->middleware('auth');
+    Route::get('/add/{id?}' , 'showAdd');
     Route::post('/add', 'addBook');
-    Route::get('/edit/{id}', 'editBook')->middleware('auth');
-    Route::put('/books/{id}', 'updateBook');
+    Route::get('/edit/{id?}', 'editBook');
+    Route::put('/books/{id?}', 'updateBook');
     Route::delete('/delete/{id}', 'deleteBook')->middleware('auth');
-    Route::get('/book' , 'showBook');
+    Route::get('/book' , 'showBook')->name('book');
     Route::get('/search', 'searchByName');
 
 });

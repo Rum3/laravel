@@ -30,8 +30,11 @@
         </div>
     </form>
     </div>
-    @if(session('message'))
-    <div style="position:absolute; left:40%; top:70%;">{{ session('success') }}</div>
-    @endif
+        @if(session('message') === 'zdr')
+            <p>Привет! (Message: {{ session('message') }})</p>
+        @elseif(session('message') === 'zdr 0')
+            <p>Привет 0! (Message: {{ session('message') }})</p>
+        @endif
+    </div>
 </body>
 </html>

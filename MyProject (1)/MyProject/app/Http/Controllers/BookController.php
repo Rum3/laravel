@@ -4,13 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Book; // Импорт на модела за книга
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller
 {
 
 
-    public function showAdd() {
-        return view('add');
+    public function showAdd($id=null) {
+
+        if(is_numeric($id)){
+            $id = intval($id);
+        }
+
+        if(is_int($id) && $id > 0){
+          $message = 'zdr'; 
+        } elseif(is_int($id) && $id = 0){
+            $message = 'zdr 0';
+        }
+        return view('add', ['message' => $message ?? '']);
     }
 
     public function addBook(Request $request) {
@@ -46,8 +57,17 @@ class BookController extends Controller
 
     public function editBook($id)
     {
+        $validator = Validator::make(['id' => $id], [
+            'id' => 'required|exists:books,id'
+        ]);
+    
+        if ($validator->fails()) {
+            // Ако валидацията не премине, изпишете грешка и върнете редирект или друг подходящ отговор на потребителя.
+            return redirect()->route('book')->withErrors($validator->errors());
+        }
+    
         $book = Book::findOrFail($id);
-
+    
         return view('edit-book', ['book' => $book]);
     }
 
